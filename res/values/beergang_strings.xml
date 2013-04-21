@@ -77,11 +77,18 @@
     <string name="volume_adjust_sounds_enable_summary">Play sound when adjusting volume with hard keys</string>
     <string name="link_volume_ringtones">Link ringtone &amp; notifications volumes</string>
     <string name="volume_ring_only_description">Ringtone</string>
+    <string name="volume_keys_control_ring_stream">Volume keys control ringtone volume</string>
     
     <!-- Settings main menu category heading. Interface (Launcher, Themes, System). [CHAR LIMIT=40] -->
     <string name="header_category_beergang">BEERGANG</string>
 
     <!-- BeerGang Settings -->
-    <string name="beergang_beerbar_settings">Beer bar</string>
+    <string name="beerbar_settings">Beer bar</string>
+    <string name="status_bar_title">Status bar</string>
+    <string name="volume_rocker_category_title">Volume rocker</string>
+    
+    <!-- Volume rocker music control -->
+    <string name="volbtn_music_controls_title">Volume rocker music controls</string>
+    <string name="volbtn_music_controls_summary">When screen off, long-pressing the volume rockers will skip tracks</string>
 
 </resources>

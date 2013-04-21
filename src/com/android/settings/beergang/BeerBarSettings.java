@@ -30,23 +30,24 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 
-//public class BeerBarSettings extends SettingsPreferenceFragment implements
-//Preference.OnPreferenceChangeListener {
+public class BeerBarSettings extends SettingsPreferenceFragment implements
+Preference.OnPreferenceChangeListener {
+    private static final String TAG = "BeerBarSettings";
     
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         
-//        addPreferencesFromResource(R.xml.beergang_beerbar_settings);
+        addPreferencesFromResource(R.xml.beerbar_settings);
 
-//    }
+    }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//    }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
     
-//    public boolean onPreferenceChange(Preference preference, Object newValue) {
-//        return false;
-//    }
-//}
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        return false;
+    }
+}
