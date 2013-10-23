@@ -71,5 +71,14 @@
     
     <!--AppOps-->
     <string name="appops_settings_title">App privacy</string>
+    
+    <!-- Volume Tweaks -->
+    <string name="volume_adjust_sounds_enable_title">Volume adjust sound</string>
+    <string name="volume_adjust_sounds_enable_summary">Play sound when adjusting volume with hard keys</string>
+    <string name="link_volume_ringtones">Link ringtone &amp; notifications volumes</string>
+    <string name="volume_ring_only_description">Ringtone</string>
+    
+    <!-- Settings main menu category heading. Interface (Launcher, Themes, System). [CHAR LIMIT=40] -->
+    <string name="header_category_beergang">BEERGANG</string>
 
 </resources>
