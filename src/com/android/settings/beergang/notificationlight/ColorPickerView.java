@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.android.settings.slim.notificationlight;
+package com.android.settings.beergang.notificationlight;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010 Daniel Nilsson
- * Copyright (C) 2012 THe CyanogenMod Project
+ * Copyright (C) 2012 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.android.settings.slim.notificationlight;
+package com.android.settings.beergang.notificationlight;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

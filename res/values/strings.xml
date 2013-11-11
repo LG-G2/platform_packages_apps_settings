@@ -4903,9 +4903,4 @@
     <!-- Text to display in regulatory info screen (from device overlay). -->
     <string name="regulatory_info_text"></string>
     
-    <!-- BeerGang Settings -->
-    <!-- About phone screen, BeerGang version -->
-    <string name="beergang_version_title">BeerGang version</string>
-    <string name="beergang_version_default">Unknown</string>
-    
 </resources>

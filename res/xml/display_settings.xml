@@ -59,12 +59,12 @@
             <PreferenceScreen
                 android:key="battery_light"
                 android:title="@string/battery_light_title"
-                android:fragment="com.android.settings.slim.notificationlight.BatteryLightSettings" />
+                android:fragment="com.android.settings.beergang.notificationlight.BatteryLightSettings" />
 
             <PreferenceScreen
                 android:key="notification_pulse"
                 android:title="@string/notification_pulse_title"
-                android:fragment="com.android.settings.slim.notificationlight.NotificationLightSettings" />
+                android:fragment="com.android.settings.beergang.notificationlight.NotificationLightSettings" />
 
         </PreferenceCategory>
 

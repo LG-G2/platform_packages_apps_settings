@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.settings.slim.notificationlight;
+package com.android.settings.beergang.notificationlight;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
