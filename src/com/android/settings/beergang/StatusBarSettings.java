@@ -127,7 +127,7 @@ OnPreferenceChangeListener {
             int batteryStyleValue = Integer.valueOf((String) objValue);
             int batteryStyleIndex = mStatusBarBattery.findIndexOfValue((String) objValue);
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.STATUS_BAR_BATTERY, batteryStyleValue);
+                    Settings.System.STATUS_BAR_BATTERY, batteryStyleValue);
             mStatusBarBattery.setSummary(mStatusBarBattery.getEntries()[batteryStyleIndex]);
             return true;
         } else if (preference == mStatusBarDoubleTapSleepGesture) {
@@ -138,18 +138,18 @@ OnPreferenceChangeListener {
         } else if (preference == mQuickPulldown) {
             int quickPulldownValue = Integer.valueOf((String) objValue);
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.QS_QUICK_PULLDOWN, quickPulldownValue);
+                    Settings.System.QS_QUICK_PULLDOWN, quickPulldownValue);
             updatePulldownSummary(quickPulldownValue);
             return true;
         } else if (preference == mStatusBarCustomHeader) {
             boolean value = (Boolean) objValue;
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                        Settings.System.STATUS_BAR_CUSTOM_HEADER, value ? 1 : 0);
+                    Settings.System.STATUS_BAR_CUSTOM_HEADER, value ? 1 : 0);
             return true;
         } else if (preference == mStatusBarNotifCount) {
             boolean value = (Boolean) objValue;
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                                   Settings.System.STATUS_BAR_NOTIF_COUNT, value ? 1 : 0);
+                    Settings.System.STATUS_BAR_NOTIF_COUNT, value ? 1 : 0);
             return true;
         }
         return false;

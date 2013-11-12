@@ -208,5 +208,8 @@
     <string name="notification_custom_carrier_label_title">Custom carrier label</string>
     <string name="notification_custom_carrier_label_explain">Please enter a new label. Enter an empty label to revert to stock label.</string>
     <string name="notification_custom_carrier_label_notset">Custom label currently not set</string>
+    
+    <!-- Lockscreen widgets -->
+    <string name="security_maximize_widgets_title">Maximize lockscreen widgets</string>
 
 </resources>
