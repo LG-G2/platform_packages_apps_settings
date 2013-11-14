@@ -81,4 +81,7 @@
     <!-- Settings main menu category heading. Interface (Launcher, Themes, System). [CHAR LIMIT=40] -->
     <string name="header_category_beergang">BEERGANG</string>
 
+    <!-- BeerGang Settings -->
+    <string name="beergang_beerbar_settings">Beer bar</string>
+
 </resources>
