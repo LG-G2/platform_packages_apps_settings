@@ -15,7 +15,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
+    <!-- General -->
     <string name="ok">OK</string>
+    <string name="attention">Attention</string>
     
     <!-- About phone screen, BeerGang version -->
     <string name="beergang_version_title">BeerGang version</string>
@@ -86,9 +88,14 @@
     <string name="beerbar_settings">Beer bar</string>
     <string name="status_bar_title">Status bar</string>
     <string name="volume_rocker_category_title">Volume rocker</string>
-    
+
     <!-- Volume rocker music control -->
     <string name="volbtn_music_controls_title">Volume rocker music controls</string>
     <string name="volbtn_music_controls_summary">When screen off, long-pressing the volume rockers will skip tracks</string>
+    
+    <!-- Safe headset volume restore checkbox -->
+    <string name="safe_headset_volume_title">Safe headset volume</string>
+    <string name="safe_headset_volume_summary">Prevent loud volume levels when headset is first plugged in</string>
+    <string name="safe_headset_volume_warning_dialog_text">Listening at high volume for long periods may damage your hearing. Disable it with caution.</string>
 
 </resources>
