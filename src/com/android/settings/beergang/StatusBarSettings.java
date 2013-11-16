@@ -37,9 +37,11 @@ OnPreferenceChangeListener {
     
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+    private static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
     
     private ListPreference mQuickPulldown;
     private CheckBoxPreference mStatusBarBrightnessControl;
+    private CheckBoxPreference mStatusBarNotifCount;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,13 @@ OnPreferenceChangeListener {
         // Status bar brightness control
         mStatusBarBrightnessControl = (CheckBoxPreference) getPreferenceScreen().findPreference(STATUS_BAR_BRIGHTNESS_CONTROL);
         mStatusBarBrightnessControl.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
-                                                                       Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1));
+                    Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1));
+        
+        mStatusBarNotifCount = (CheckBoxPreference) getPreferenceScreen.findPreference(STATUS_BAR_NOTIF_COUNT);
+        mStatusBarNotifCount.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1));
+        //mStatusBarNotifCount.setOnPreferenceChangeListener(this);
+        
         try {
             if (Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                                        Settings.System.SCREEN_BRIGHTNESS_MODE) == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
@@ -94,7 +102,11 @@ OnPreferenceChangeListener {
                                    Settings.System.QS_QUICK_PULLDOWN, quickPulldownValue);
             updatePulldownSummary(quickPulldownValue);
             return true;
-            
+        } else if (preference == mStatusBarNotifCount) {
+            boolean value = (Boolean) objValue;
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                                   Settings.System.STATUS_BAR_NOTIF_COUNT, value ? 1 : 0);
+            return true;
         }
         return false;
     }
