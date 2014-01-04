@@ -25,7 +25,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -39,6 +41,7 @@ import android.util.Log;
 
 import com.android.internal.view.RotationPolicy;
 import com.android.settings.DreamSettings;
+import com.android.settings.slim.DisplayRotation;
 
 import java.util.ArrayList;
 
@@ -50,7 +53,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final int FALLBACK_SCREEN_TIMEOUT_VALUE = 30000;
 
     private static final String KEY_SCREEN_TIMEOUT = "screen_timeout";
-    private static final String KEY_ACCELEROMETER = "accelerometer";
+    private static final String KEY_DISPLAY_ROTATION = "display_rotation";
     private static final String KEY_FONT_SIZE = "font_size";
     private static final String KEY_LIGHT_OPTIONS = "category_light_options";
     private static final String KEY_NOTIFICATION_PULSE = "notification_pulse";
@@ -59,7 +62,12 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
-    private CheckBoxPreference mAccelerometer;
+    private static final String ROTATION_ANGLE_0 = "0";
+    private static final String ROTATION_ANGLE_90 = "90";
+    private static final String ROTATION_ANGLE_180 = "180";
+    private static final String ROTATION_ANGLE_270 = "270";
+
+    private PreferenceScreen mDisplayRotationPreference;
     private WarnedListPreference mFontSizePref;
     private PreferenceCategory mLightOptions;
     private PreferenceScreen mNotificationPulse;
@@ -71,11 +79,11 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private Preference mScreenSaverPreference;
 
 
-    private final RotationPolicy.RotationPolicyListener mRotationPolicyListener =
-            new RotationPolicy.RotationPolicyListener() {
+    private ContentObserver mAccelerometerRotationObserver =
+            new ContentObserver(new Handler()) {
         @Override
-        public void onChange() {
-            updateAccelerometerRotationCheckbox();
+        public void onChange(boolean selfChange) {
+            updateDisplayRotationPreferenceDescription();
         }
     };
 
@@ -88,14 +96,9 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
         PreferenceScreen prefSet = getPreferenceScreen();
 
-        mAccelerometer = (CheckBoxPreference) findPreference(KEY_ACCELEROMETER);
-        mAccelerometer.setPersistent(false);
-        if (!RotationPolicy.isRotationSupported(getActivity())
-                || RotationPolicy.isRotationLockToggleSupported(getActivity())) {
-            // If rotation lock is supported, then we do not provide this option in
-            // Display settings.  However, is still available in Accessibility settings,
-            // if the device supports rotation.
-            getPreferenceScreen().removePreference(mAccelerometer);
+        mDisplayRotationPreference = (PreferenceScreen) findPreference(KEY_DISPLAY_ROTATION);
+        if (!RotationPolicy.isRotationSupported(getActivity())) {
+            getPreferenceScreen().removePreference(mDisplayRotationPreference);
         }
 
         mScreenSaverPreference = findPreference(KEY_SCREEN_SAVER);
@@ -241,19 +244,17 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     @Override
     public void onResume() {
         super.onResume();
-
-        RotationPolicy.registerRotationPolicyListener(getActivity(),
-                mRotationPolicyListener);
-
+        getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION), true,
+                mAccelerometerRotationObserver);
+        updateDisplayRotationPreferenceDescription();
         updateState();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        RotationPolicy.unregisterRotationPolicyListener(getActivity(),
-                mRotationPolicyListener);
+        getContentResolver().unregisterContentObserver(mAccelerometerRotationObserver);
     }
 
     @Override
@@ -271,7 +272,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     }
 
     private void updateState() {
-        updateAccelerometerRotationCheckbox();
         readFontSizePreference(mFontSizePref);
         updateScreenSaverSummary();
     }
@@ -281,12 +281,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             mScreenSaverPreference.setSummary(
                     DreamSettings.getSummaryTextWithDreamName(getActivity()));
         }
-    }
-
-    private void updateAccelerometerRotationCheckbox() {
-        if (getActivity() == null) return;
-
-        mAccelerometer.setChecked(!RotationPolicy.isRotationLocked(getActivity()));
     }
 
     public void writeFontSizePreference(Object objValue) {
@@ -316,12 +310,61 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         }
      }
 
+    private void updateDisplayRotationPreferenceDescription() {
+        if (mDisplayRotationPreference == null) {
+            return;
+        }
+        PreferenceScreen preference = mDisplayRotationPreference;
+        StringBuilder summary = new StringBuilder();
+        Boolean rotationEnabled = Settings.System.getInt(getContentResolver(),
+                Settings.System.ACCELEROMETER_ROTATION, 0) != 0;
+
+        int allowAllRotations = getResources().
+                getBoolean(com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
+
+        int mode = Settings.System.getInt(getContentResolver(),
+                        Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
+        if (mode < 0) {
+            // defaults
+            mode = allowAllRotations == 1 ?
+                    (DisplayRotation.ROTATION_0_MODE | DisplayRotation.ROTATION_90_MODE |
+                            DisplayRotation.ROTATION_180_MODE | DisplayRotation.ROTATION_270_MODE) : // All angles
+                    (DisplayRotation.ROTATION_0_MODE | DisplayRotation.ROTATION_90_MODE |
+                            DisplayRotation.ROTATION_270_MODE); // All except 180
+        }
+
+        if (!rotationEnabled) {
+            summary.append(getString(R.string.display_rotation_disabled));
+        } else {
+            ArrayList<String> rotationList = new ArrayList<String>();
+            String delim = "";
+            if ((mode & DisplayRotation.ROTATION_0_MODE) != 0) {
+                rotationList.add(ROTATION_ANGLE_0);
+            }
+            if ((mode & DisplayRotation.ROTATION_90_MODE) != 0) {
+                rotationList.add(ROTATION_ANGLE_90);
+            }
+            if ((mode & DisplayRotation.ROTATION_180_MODE) != 0) {
+                rotationList.add(ROTATION_ANGLE_180);
+            }
+            if ((mode & DisplayRotation.ROTATION_270_MODE) != 0) {
+                rotationList.add(ROTATION_ANGLE_270);
+            }
+            for (int i = 0; i < rotationList.size(); i++) {
+                summary.append(delim).append(rotationList.get(i));
+                if ((rotationList.size() - i) > 2) {
+                    delim = ", ";
+                } else {
+                    delim = " & ";
+                }
+            }
+            summary.append(" " + getString(R.string.display_rotation_unit));
+        }
+        preference.setSummary(summary);
+    }
+
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-        if (preference == mAccelerometer) {
-            RotationPolicy.setRotationLockForAccessibility(
-                    getActivity(), !mAccelerometer.isChecked());
-        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
