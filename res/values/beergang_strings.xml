@@ -211,5 +211,12 @@
     
     <!-- Lockscreen widgets -->
     <string name="security_maximize_widgets_title">Maximize lockscreen widgets</string>
+    
+    <!--Notification category-->
+    <string name="notification_category">Notifications</string>
+    
+    <!--Notification peek-->
+    <string name="notification_peek_title">Notification peek</string>
+    <string name="notification_peek_summary">Show latest notification after picking up your device</string>
 
 </resources>

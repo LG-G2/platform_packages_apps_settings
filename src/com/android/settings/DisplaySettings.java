@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -59,6 +60,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_NOTIFICATION_PULSE = "notification_pulse";
     private static final String KEY_BATTERY_LIGHT = "battery_light";
     private static final String KEY_SCREEN_SAVER = "screensaver";
+    private static final String KEY_PEEK = "notification_peek";
 
     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
 
@@ -68,6 +70,10 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String ROTATION_ANGLE_270 = "270";
 
     private PreferenceScreen mDisplayRotationPreference;
+            
+    private CheckBoxPreference mAccelerometer;
+    private CheckBoxPreference mNotificationPeek;
+            
     private WarnedListPreference mFontSizePref;
     private PreferenceCategory mLightOptions;
     private PreferenceScreen mNotificationPulse;
@@ -121,6 +127,13 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         mFontSizePref.setOnPreferenceClickListener(this);
 
         mLightOptions = (PreferenceCategory) prefSet.findPreference(KEY_LIGHT_OPTIONS);
+
+        mNotificationPeek = (CheckBoxPreference) findPreference(KEY_PEEK);
+        mNotificationPeek.setPersistent(false);
+
+        boolean hasNotificationLed = getResources().getBoolean(
+                com.android.internal.R.bool.config_intrusiveNotificationLed);
+
         mNotificationPulse = (PreferenceScreen) findPreference(KEY_NOTIFICATION_PULSE);
         if (mNotificationPulse != null) {
             if (!getResources().getBoolean(
@@ -274,6 +287,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private void updateState() {
         readFontSizePreference(mFontSizePref);
         updateScreenSaverSummary();
+        updatePeekCheckbox();
     }
 
     private void updateScreenSaverSummary() {
@@ -281,6 +295,18 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             mScreenSaverPreference.setSummary(
                     DreamSettings.getSummaryTextWithDreamName(getActivity()));
         }
+    }
+
+    private void updateAccelerometerRotationCheckbox() {
+        if (getActivity() == null) return;
+
+        mAccelerometer.setChecked(!RotationPolicy.isRotationLocked(getActivity()));
+    }
+
+    private void updatePeekCheckbox() {
+        boolean enabled = Settings.System.getInt(getContentResolver(),
+                Settings.System.PEEK_STATE, 0) == 1;
+        mNotificationPeek.setChecked(enabled);
     }
 
     public void writeFontSizePreference(Object objValue) {
@@ -365,6 +391,13 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        if (preference == mAccelerometer) {
+            RotationPolicy.setRotationLockForAccessibility(
+                    getActivity(), !mAccelerometer.isChecked());
+        } else if (preference == mNotificationPeek) {
+            Settings.System.putInt(getContentResolver(), Settings.System.PEEK_STATE,
+                    mNotificationPeek.isChecked() ? 1 : 0);
+        }
         return super.onPreferenceTreeClick(preferenceScreen, preference);
     }
 
@@ -383,7 +416,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         if (KEY_FONT_SIZE.equals(key)) {
             writeFontSizePreference(objValue);
         }
-
         return true;
     }
 
