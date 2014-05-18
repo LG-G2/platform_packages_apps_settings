@@ -63,10 +63,10 @@ OnPreferenceChangeListener {
         mStatusBarBrightnessControl.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1));
         
-        mStatusBarNotifCount = (CheckBoxPreference) getPreferenceScreen.findPreference(STATUS_BAR_NOTIF_COUNT);
+        mStatusBarNotifCount = (CheckBoxPreference) getPreferenceScreen().findPreference(STATUS_BAR_NOTIF_COUNT);
         mStatusBarNotifCount.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUS_BAR_NOTIF_COUNT, 0) == 1));
-        //mStatusBarNotifCount.setOnPreferenceChangeListener(this);
+        mStatusBarNotifCount.setOnPreferenceChangeListener(this);
         
         try {
             if (Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
