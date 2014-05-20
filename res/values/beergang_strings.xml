@@ -125,5 +125,12 @@
     <string name="safe_headset_volume_title">Safe headset volume</string>
     <string name="safe_headset_volume_summary">Prevent loud volume levels when headset is first plugged in</string>
     <string name="safe_headset_volume_warning_dialog_text">Listening at high volume for long periods may damage your hearing. Disable it with caution.</string>
-
+    
+    <!--Battery Icon selection-->
+    <string name="status_bar_battery_title">Battery style</string>
+    <string name="status_bar_style_icon">Icon</string>
+    <string name="status_bar_style_icon_percentage">Icon with percentage</string>
+    <string name="status_bar_style_hidden">Hidden</string>
+    <string name="status_bar_battery_status_circle">Circle</string>
+    <string name="status_bar_battery_status_circle_percentage">Circle with percentage</string>
 </resources>

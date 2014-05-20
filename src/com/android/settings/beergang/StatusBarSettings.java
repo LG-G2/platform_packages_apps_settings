@@ -24,6 +24,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
@@ -32,13 +33,16 @@ import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.Utils;
 
+
 public class StatusBarSettings extends SettingsPreferenceFragment implements
 OnPreferenceChangeListener {
     
+    private static final String STATUS_BAR_BATTERY = "status_bar_battery";
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
     private static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
     
+    private ListPreference mStatusBarBattery;
     private ListPreference mQuickPulldown;
     private CheckBoxPreference mStatusBarBrightnessControl;
     private CheckBoxPreference mStatusBarNotifCount;
@@ -49,12 +53,19 @@ OnPreferenceChangeListener {
         
         addPreferencesFromResource(R.xml.status_bar_settings);
         
+        // Status bar battery style
+        mStatusBarBattery = (ListPreference) findPreference(STATUS_BAR_BATTERY);
+        mStatusBarBattery.setOnPreferenceChangeListener(this);
+        int batteryStyleValue = Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                                        Settings.System.STATUS_BAR_BATTERY, 0);
+        mStatusBarBattery.setValue(String.valueOf(batteryStyleValue));
+        mStatusBarBattery.setSummary(mStatusBarBattery.getEntry());
+        
         // Quick Settings pull down
         mQuickPulldown = (ListPreference) getPreferenceScreen().findPreference(QUICK_PULLDOWN);
         mQuickPulldown.setOnPreferenceChangeListener(this);
-        int quickPulldownValue = Settings.System.getInt(getActivity().getApplicationContext()
-                                                        .getContentResolver(),
-                                                        Settings.System.QS_QUICK_PULLDOWN, 0);
+        int quickPulldownValue = Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                                            Settings.System.QS_QUICK_PULLDOWN, 0);
         mQuickPulldown.setValue(String.valueOf(quickPulldownValue));
         updatePulldownSummary(quickPulldownValue);
         
@@ -96,7 +107,14 @@ OnPreferenceChangeListener {
     }
     
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == mQuickPulldown) {
+        if (preference == mStatusBarBattery) {
+            int batteryStyleValue = Integer.valueOf((String) objValue);
+            int batteryStyleIndex = mStatusBarBattery.findIndexOfValue((String) objValue);
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                        Settings.System.STATUS_BAR_BATTERY, batteryStyleValue);
+            mStatusBarBattery.setSummary(mStatusBarBattery.getEntries()[batteryStyleIndex]);
+            return true;
+        } else if (preference == mQuickPulldown) {
             int quickPulldownValue = Integer.valueOf((String) objValue);
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                                    Settings.System.QS_QUICK_PULLDOWN, quickPulldownValue);
