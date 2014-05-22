@@ -40,11 +40,13 @@ OnPreferenceChangeListener {
     private static final String STATUS_BAR_BATTERY = "status_bar_battery";
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
+    private static final String STATUS_BAR_CUSTOM_HEADER = "custom_status_bar_header";
     private static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
     
     private ListPreference mStatusBarBattery;
     private ListPreference mQuickPulldown;
     private CheckBoxPreference mStatusBarBrightnessControl;
+    private CheckBoxPreference mStatusBarCustomHeader;
     private CheckBoxPreference mStatusBarNotifCount;
     
     @Override
@@ -65,7 +67,7 @@ OnPreferenceChangeListener {
         mQuickPulldown = (ListPreference) getPreferenceScreen().findPreference(QUICK_PULLDOWN);
         mQuickPulldown.setOnPreferenceChangeListener(this);
         int quickPulldownValue = Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
-                                            Settings.System.QS_QUICK_PULLDOWN, 0);
+                    Settings.System.QS_QUICK_PULLDOWN, 0);
         mQuickPulldown.setValue(String.valueOf(quickPulldownValue));
         updatePulldownSummary(quickPulldownValue);
         
@@ -73,6 +75,12 @@ OnPreferenceChangeListener {
         mStatusBarBrightnessControl = (CheckBoxPreference) getPreferenceScreen().findPreference(STATUS_BAR_BRIGHTNESS_CONTROL);
         mStatusBarBrightnessControl.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.STATUS_BAR_BRIGHTNESS_CONTROL, 0) == 1));
+        
+        //Contextual notification header
+        mStatusBarCustomHeader = (CheckBoxPreference) getPreferenceScreen().findPreference(STATUS_BAR_CUSTOM_HEADER);
+        mStatusBarCustomHeader.setChecked(Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
+                    Settings.System.STATUS_BAR_CUSTOM_HEADER, 0) == 1);
+        mStatusBarCustomHeader.setOnPreferenceChangeListener(this);
         
         mStatusBarNotifCount = (CheckBoxPreference) getPreferenceScreen().findPreference(STATUS_BAR_NOTIF_COUNT);
         mStatusBarNotifCount.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
@@ -117,8 +125,13 @@ OnPreferenceChangeListener {
         } else if (preference == mQuickPulldown) {
             int quickPulldownValue = Integer.valueOf((String) objValue);
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                                   Settings.System.QS_QUICK_PULLDOWN, quickPulldownValue);
+                        Settings.System.QS_QUICK_PULLDOWN, quickPulldownValue);
             updatePulldownSummary(quickPulldownValue);
+            return true;
+        } else if (preference == mStatusBarCustomHeader) {
+            boolean value = (Boolean) objValue;
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
+                        Settings.System.STATUS_BAR_CUSTOM_HEADER, value ? 1 : 0);
             return true;
         } else if (preference == mStatusBarNotifCount) {
             boolean value = (Boolean) objValue;
