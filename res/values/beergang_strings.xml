@@ -172,5 +172,18 @@
     <!-- Advanced reboot options -->
     <string name="advanced_reboot_title">Advanced reboot</string>
     <string name="advanced_reboot_summary">When unlocked, include options in the power menu for rebooting into recovery or bootloader</string>
+    
+    <!-- Power Menu Options-->
+    <string name="power_menu_title">Power menu</string>
+    <string name="power_menu_toggle_screenshot_title">Show Screenshot</string>
+    <string name="power_menu_toggle_screenshot_summary">Tick or untick to show/hide screenshot option in Power Menu</string>
+    <string name="power_menu_toggle_screenrecord_title">Screen Record</string>
+    <string name="power_menu_toggle_screenrecord_summary">Show screen Record option in Power Menu</string>
+    <string name="power_menu_toggle_mobile_data_title">Mobile Data</string>
+    <string name="power_menu_toggle_mobile_data_summary">Show Mobile Data option in Power Menu</string>
+    <string name="power_menu_toggle_airplane_mode_title">Airplane mode</string>
+    <string name="power_menu_toggle_airplane_mode_summary">Show Airplane option in Power Menu</string>
+    <string name="power_menu_toggle_sound_toggles_title">Sound toggles</string>
+    <string name="power_menu_toggle_sound_toggles_summary">Show sound toggles in Power Menu</string>
 
 </resources>
