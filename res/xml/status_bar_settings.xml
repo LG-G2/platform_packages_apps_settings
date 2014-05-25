@@ -23,7 +23,7 @@
         android:entryValues="@array/values_status_bar_battery"
         android:key="status_bar_battery"
         android:title="@string/status_bar_battery_title" />
-    
+
     <ListPreference
         android:key="quick_pulldown"
         android:title="@string/quick_pulldown_title"
