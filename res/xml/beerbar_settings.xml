@@ -23,16 +23,16 @@
         android:key="status_bar"
         android:fragment="com.android.settings.beergang.StatusBarSettings"
         android:title="@string/status_bar_title" />
-    
-    <PreferenceScreen
-        android:fragment="com.android.settings.beergang.PowerMenuConfig"
-        android:key="category_power_menu"
-        android:title="@string/power_menu_title" />
         
     <PreferenceScreen
         android:fragment="com.android.settings.beergang.StatusBarClockStyle"
         android:key="clock_style_pref"
         android:title="@string/status_bar_clock" />
+    
+    <PreferenceScreen
+        android:fragment="com.android.settings.beergang.PowerMenuConfig"
+        android:key="category_power_menu"
+        android:title="@string/power_menu_title" />
     
     <PreferenceScreen
         android:key="volume_rocker_settings"
