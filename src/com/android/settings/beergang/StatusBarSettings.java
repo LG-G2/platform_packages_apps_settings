@@ -69,6 +69,7 @@ OnPreferenceChangeListener {
         mStatusBarDoubleTapSleepGesture = (CheckBoxPreference) getPreferenceScreen().findPreference(DOUBLE_TAP_SLEEP_GESTURE);
         mStatusBarDoubleTapSleepGesture.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
                 Settings.System.DOUBLE_TAP_SLEEP_GESTURE, 0) == 1));
+        mStatusBarDoubleTapSleepGesture.setOnPreferenceChangeListener(this);
         
         // Quick Settings pull down
         mQuickPulldown = (ListPreference) getPreferenceScreen().findPreference(QUICK_PULLDOWN);
@@ -130,7 +131,7 @@ OnPreferenceChangeListener {
             mStatusBarBattery.setSummary(mStatusBarBattery.getEntries()[batteryStyleIndex]);
             return true;
         } else if (preference == mStatusBarDoubleTapSleepGesture) {
-            value = mStatusBarDoubleTapSleepGesture.isChecked();
+            boolean value = (Boolean) objValue;
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE, value ? 1: 0);
             return true;
