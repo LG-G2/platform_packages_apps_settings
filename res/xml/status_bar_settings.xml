@@ -14,11 +14,6 @@ limitations under the License.
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/status_bar_title">
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="double_tap_sleep_gesture"
-        android:title="@string/status_bar_double_tap_to_sleep_title" />
-        
     <ListPreference
         android:dialogTitle="@string/status_bar_battery_title"
         android:entries="@array/entries_status_bar_battery"
@@ -39,6 +34,11 @@ limitations under the License.
         android:summary="@string/status_bar_toggle_brightness_summary"
         android:defaultValue="false" />
     
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="double_tap_sleep_gesture"
+        android:title="@string/status_bar_double_tap_to_sleep_title" />
+        
     <CheckBoxPreference
         android:key="custom_status_bar_header"
         android:title="@string/custom_statusbar_header_title"
