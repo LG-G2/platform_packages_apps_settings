@@ -24,7 +24,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
@@ -33,18 +32,15 @@ import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.Utils;
 
-
 public class StatusBarSettings extends SettingsPreferenceFragment implements
 OnPreferenceChangeListener {
     
-    private static final String STATUS_BAR_BATTERY = "status_bar_battery";
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
     private static final String STATUS_BAR_CUSTOM_HEADER = "custom_status_bar_header";
     private static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
     private static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
     
-    private ListPreference mStatusBarBattery;
     private ListPreference mQuickPulldown;
     private CheckBoxPreference mStatusBarBrightnessControl;
     private CheckBoxPreference mStatusBarCustomHeader;
@@ -56,14 +52,6 @@ OnPreferenceChangeListener {
         super.onCreate(savedInstanceState);
         
         addPreferencesFromResource(R.xml.status_bar_settings);
-        
-        // Status bar battery style
-        mStatusBarBattery = (ListPreference) findPreference(STATUS_BAR_BATTERY);
-        mStatusBarBattery.setOnPreferenceChangeListener(this);
-        int batteryStyleValue = Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
-                                        Settings.System.STATUS_BAR_BATTERY, 0);
-        mStatusBarBattery.setValue(String.valueOf(batteryStyleValue));
-        mStatusBarBattery.setSummary(mStatusBarBattery.getEntry());
 
         // Status bar double-tap to sleep
         mStatusBarDoubleTapSleepGesture = (CheckBoxPreference) getPreferenceScreen().findPreference(DOUBLE_TAP_SLEEP_GESTURE);
@@ -123,14 +111,7 @@ OnPreferenceChangeListener {
     }
     
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == mStatusBarBattery) {
-            int batteryStyleValue = Integer.valueOf((String) objValue);
-            int batteryStyleIndex = mStatusBarBattery.findIndexOfValue((String) objValue);
-            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
-                    Settings.System.STATUS_BAR_BATTERY, batteryStyleValue);
-            mStatusBarBattery.setSummary(mStatusBarBattery.getEntries()[batteryStyleIndex]);
-            return true;
-        } else if (preference == mStatusBarDoubleTapSleepGesture) {
+        if (preference == mStatusBarDoubleTapSleepGesture) {
             boolean value = (Boolean) objValue;
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE, value ? 1: 0);
