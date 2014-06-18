@@ -13,6 +13,19 @@ limitations under the License.
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/status_bar_title">
+    
+    <ListPreference
+        android:key="battery_icon"
+        android:dialogTitle="@string/battery_icon_title"
+        android:title="@string/battery_icon_title"
+        android:entries="@array/entries_battery_icon"
+        android:entryValues="@array/values_battery_icon" />
+        
+    <ListPreference
+        android:key="circle_battery_animation_speed"
+        android:title="@string/circle_battery_animation_speed"
+        android:entries="@array/circle_battery_animation_speed_entries"
+        android:entryValues="@array/circle_battery_animation_speed_values" />
 
     <ListPreference
         android:key="quick_pulldown"

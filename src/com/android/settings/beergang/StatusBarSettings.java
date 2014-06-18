@@ -35,12 +35,16 @@ import com.android.settings.Utils;
 public class StatusBarSettings extends SettingsPreferenceFragment implements
 OnPreferenceChangeListener {
     
+    private static final String STATUS_BAR_BATTERY = "battery_icon";
+    private static final String STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED = "circle_battery_animation_speed";
     private static final String QUICK_PULLDOWN = "quick_pulldown";
     private static final String STATUS_BAR_BRIGHTNESS_CONTROL = "status_bar_brightness_control";
     private static final String STATUS_BAR_CUSTOM_HEADER = "custom_status_bar_header";
     private static final String STATUS_BAR_NOTIF_COUNT = "status_bar_notif_count";
     private static final String DOUBLE_TAP_SLEEP_GESTURE = "double_tap_sleep_gesture";
     
+    private ListPreference mStatusBarBattery;
+    private ListPreference mCircleAnimSpeed;
     private ListPreference mQuickPulldown;
     private CheckBoxPreference mStatusBarBrightnessControl;
     private CheckBoxPreference mStatusBarCustomHeader;
@@ -52,7 +56,20 @@ OnPreferenceChangeListener {
         super.onCreate(savedInstanceState);
         
         addPreferencesFromResource(R.xml.status_bar_settings);
+        
+        mStatusBarBattery = (ListPreference) getPreferenceScreen().findPreference(STATUS_BAR_BATTERY);
+        mStatusBarBattery.setOnPreferenceChangeListener(this);
+        int statusBarBattery = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.STATUS_BAR_BATTERY, 0);
+        mStatusBarBattery.setValue(String.valueOf(statusBarBattery));
+        mStatusBarBattery.setSummary(mStatusBarBattery.getEntry());
 
+        mCircleAnimSpeed = (ListPreference) getPreferenceScreen().findPreference(STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED);
+        mCircleAnimSpeed.setOnPreferenceChangeListener(this);
+        mCircleAnimSpeed.setValue((Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED, 3)) + "");
+        mCircleAnimSpeed.setSummary(mCircleAnimSpeed.getEntry());
+        
         // Status bar double-tap to sleep
         mStatusBarDoubleTapSleepGesture = (CheckBoxPreference) getPreferenceScreen().findPreference(DOUBLE_TAP_SLEEP_GESTURE);
         mStatusBarDoubleTapSleepGesture.setChecked((Settings.System.getInt(getActivity().getApplicationContext().getContentResolver(),
@@ -111,7 +128,21 @@ OnPreferenceChangeListener {
     }
     
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == mStatusBarDoubleTapSleepGesture) {
+        if (preference == mStatusBarBattery) {
+            int statusBarBattery = Integer.valueOf((String) objValue);
+            int index = mStatusBarBattery.findIndexOfValue((String) objValue);
+                Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.STATUS_BAR_BATTERY, statusBarBattery);
+            mStatusBarBattery.setSummary(mStatusBarBattery.getEntries()[index]);
+            return true;
+        } else if (preference == mCircleAnimSpeed) {
+            int val = Integer.parseInt((String) objValue);
+            int index = mCircleAnimSpeed.findIndexOfValue((String) objValue);
+                Settings.System.putInt(getActivity().getContentResolver(),
+                Settings.System.STATUS_BAR_CIRCLE_BATTERY_ANIMATIONSPEED, val);
+            mCircleAnimSpeed.setSummary(mCircleAnimSpeed.getEntries()[index]);
+            return true;
+        } else if (preference == mStatusBarDoubleTapSleepGesture) {
             boolean value = (Boolean) objValue;
             Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE, value ? 1: 0);
