@@ -149,11 +149,10 @@ public class QuietHours extends SettingsPreferenceFragment implements
                 (Preference) findPreference(KEY_SMS_BYPASS_CODE);
             mBypassRingtone =
                 (RingtonePreference) findPreference(KEY_BYPASS_RINGTONE);
-
-
+            
             // Remove the "Incoming calls behaviour" note if the device does not support phone calls
             if (mQuietHoursNote != null && getResources().getBoolean(
-                        com.android.internal.R.bool.config_voice_capable) == false) {
+                com.android.internal.R.bool.config_voice_capable) == false) {
                 getPreferenceScreen().removePreference(mQuietHoursNote);
             }
 
